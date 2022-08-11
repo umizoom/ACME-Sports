@@ -61,28 +61,28 @@ def parse_score_board(api_helper: ApiHandler) -> List[dict]:
     """
     score_rankings_raw = api_helper.get_score_board().json()
     list_of_score_rankings = []
-    for key in score_rankings_raw['results'].keys():
-        if score_rankings_raw['results'][key]:
-            inner_keys = score_rankings_raw['results'][key]['data'].keys()
+    for outter_key in score_rankings_raw['results'].keys():
+        if score_rankings_raw['results'][outter_key]:
+            inner_keys = score_rankings_raw['results'][outter_key]['data'].keys()
             for inner_key in inner_keys:
                 new_score_rankings = dict()
-                new_score_rankings['event_id'] = score_rankings_raw['results'][key]['data'][inner_key]['event_id']
+                new_score_rankings['event_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['event_id']
                 new_score_rankings['event_date'] = parse_date(
-                    score_rankings_raw['results'][key]['data'][inner_key]['event_date'])
+                    score_rankings_raw['results'][outter_key]['data'][inner_key]['event_date'])
                 new_score_rankings['event_time'] = parse_time(
-                    score_rankings_raw['results'][key]['data'][inner_key]['event_date'])
-                new_score_rankings['away_team_id'] = score_rankings_raw['results'][key]['data'][inner_key][
+                    score_rankings_raw['results'][outter_key]['data'][inner_key]['event_date'])
+                new_score_rankings['away_team_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
                     'away_team_id']
-                new_score_rankings['away_nick_name'] = score_rankings_raw['results'][key]['data'][inner_key][
+                new_score_rankings['away_nick_name'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
                     'away_nick_name']
-                new_score_rankings['away_city'] = score_rankings_raw['results'][key]['data'][inner_key]['away_city']
+                new_score_rankings['away_city'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['away_city']
                 new_score_rankings['away_rank'] = None
                 new_score_rankings['away_rank_points'] = None
-                new_score_rankings['home_team_id'] = score_rankings_raw['results'][key]['data'][inner_key][
+                new_score_rankings['home_team_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
                     'home_team_id']
-                new_score_rankings['home_nick_name'] = score_rankings_raw['results'][key]['data'][inner_key][
+                new_score_rankings['home_nick_name'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
                     'home_nick_name']
-                new_score_rankings['home_city'] = score_rankings_raw['results'][key]['data'][inner_key]['home_city']
+                new_score_rankings['home_city'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['home_city']
                 new_score_rankings['home_rank'] = None
                 new_score_rankings['home_rank_points'] = None
                 list_of_score_rankings.append(new_score_rankings)
@@ -101,12 +101,12 @@ def parse_team_rankings(api_helper: ApiHandler) -> List[dict]:
     for team_rank in team_rankings_raw['results']['data']:
         for response in formatted_response:
             # Team_id from /team_rankings end point matches the home_team_id from the /score_board endpoint.
+            # using these IDs to merge data between the 2 endpoints.
             if team_rank['team_id'] == response['home_team_id']:
                 response['away_rank'] = team_rank['rank']
                 response['away_rank_points'] = str(round(float(team_rank['adjusted_points']), 2))
                 response['home_rank'] = team_rank['rank']
                 response['home_rank_points'] = response['away_rank_points']
-
     return formatted_response
 
 
