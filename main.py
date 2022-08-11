@@ -61,28 +61,28 @@ def parse_score_board(api_helper: ApiHandler) -> List[dict]:
     """
     score_rankings_raw = api_helper.get_score_board().json()
     list_of_score_rankings = []
-    for outter_key in score_rankings_raw['results'].keys():
-        if score_rankings_raw['results'][outter_key]:
-            inner_keys = score_rankings_raw['results'][outter_key]['data'].keys()
+    for outer_key in score_rankings_raw['results'].keys():
+        if score_rankings_raw['results'][outer_key]:
+            inner_keys = score_rankings_raw['results'][outer_key]['data'].keys()
             for inner_key in inner_keys:
                 new_score_rankings = dict()
-                new_score_rankings['event_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['event_id']
+                new_score_rankings['event_id'] = score_rankings_raw['results'][outer_key]['data'][inner_key]['event_id']
                 new_score_rankings['event_date'] = parse_date(
-                    score_rankings_raw['results'][outter_key]['data'][inner_key]['event_date'])
+                    score_rankings_raw['results'][outer_key]['data'][inner_key]['event_date'])
                 new_score_rankings['event_time'] = parse_time(
-                    score_rankings_raw['results'][outter_key]['data'][inner_key]['event_date'])
-                new_score_rankings['away_team_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
+                    score_rankings_raw['results'][outer_key]['data'][inner_key]['event_date'])
+                new_score_rankings['away_team_id'] = score_rankings_raw['results'][outer_key]['data'][inner_key][
                     'away_team_id']
-                new_score_rankings['away_nick_name'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
+                new_score_rankings['away_nick_name'] = score_rankings_raw['results'][outer_key]['data'][inner_key][
                     'away_nick_name']
-                new_score_rankings['away_city'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['away_city']
+                new_score_rankings['away_city'] = score_rankings_raw['results'][outer_key]['data'][inner_key]['away_city']
                 new_score_rankings['away_rank'] = None
                 new_score_rankings['away_rank_points'] = None
-                new_score_rankings['home_team_id'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
+                new_score_rankings['home_team_id'] = score_rankings_raw['results'][outer_key]['data'][inner_key][
                     'home_team_id']
-                new_score_rankings['home_nick_name'] = score_rankings_raw['results'][outter_key]['data'][inner_key][
+                new_score_rankings['home_nick_name'] = score_rankings_raw['results'][outer_key]['data'][inner_key][
                     'home_nick_name']
-                new_score_rankings['home_city'] = score_rankings_raw['results'][outter_key]['data'][inner_key]['home_city']
+                new_score_rankings['home_city'] = score_rankings_raw['results'][outer_key]['data'][inner_key]['home_city']
                 new_score_rankings['home_rank'] = None
                 new_score_rankings['home_rank_points'] = None
                 list_of_score_rankings.append(new_score_rankings)
@@ -117,7 +117,11 @@ def entry_point(api_key: str):
     :return: None
     """
     api_helper = ApiHandler(api_key=api_key)
-    print(json.dumps(parse_team_rankings(api_helper), indent=4))
+    formatted_output = parse_team_rankings(api_helper)
+    if formatted_output:
+        print(json.dumps(formatted_output, indent=4))
+    else:
+        print('Response was empty, please try another start and end time')
 
 
 def parse_time(date_time_str: str) -> str:
