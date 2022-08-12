@@ -1,12 +1,12 @@
 # ACME-Sports
 
-This project is a simple command line program written in `Python 3.8.9` that fetches and parses data from 2 API endpoints,
-merges the data and returns a json formatted string. 
+This project is a simple command line program written in `Python 3.X` that fetches and parses data from 2 API endpoints,
+merges the data and returns a json formatted string.
 
 
 ## Dependency installation
 
-It's recommended to use [Python virtual env](https://docs.python.org/3.8/tutorial/venv.html) as this prevents any issues with the global Python installation on your machine. 
+It's recommended to use a [Python virtual env](https://docs.python.org/3.8/tutorial/venv.html) as this prevents any issues with the global Python installation on your machine. 
 
 Once your python virtual env is installed and sourced, please run the following to install any dependencies. 
 
